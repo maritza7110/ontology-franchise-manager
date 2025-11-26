@@ -1,6 +1,15 @@
 const express = require('express');
-const { getFranchiseRanking, getMarketInsights, getSVPerformance } = require('../services/analysis');
+const { getFranchiseRanking, getMarketInsights, getSVPerformance, getOntologyData } = require('../services/analysis');
 const router = express.Router();
+
+router.get('/graph-data', (req, res) => {
+    try {
+        const data = getOntologyData();
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 router.get('/franchise-ranking', (req, res) => {
     try {

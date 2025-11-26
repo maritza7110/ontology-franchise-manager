@@ -7,6 +7,7 @@
     <title>Ontology Franchise Manager</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 
 <body>
@@ -19,10 +20,11 @@
                 <button class="tab-btn" data-tab="sv">SV 관리</button>
                 <button class="tab-btn" data-tab="external">⚠️ 외부 요인</button>
                 <button class="tab-btn" data-tab="simulation">🤖 AI 시뮬레이션</button>
+                <button class="tab-btn" data-tab="ontology">🔗 온톨로지 그래프</button>
                 <button class="tab-btn" data-tab="market">시장 예측</button>
             </nav>
             <div class="api-settings">
-                <button id="api-config-btn" class="action-btn">⚙️ API 설정</button>
+                <button id="open-api-config" class="action-btn">⚙️ API 설정</button>
             </div>
         </header>
         <main>
@@ -112,6 +114,27 @@
                     </div>
                 </div>
             </section>
+            <!-- Ontology Graph Tab -->
+            <section id="ontology" class="tab-content">
+                <h2>🔗 온톨로지 관계 그래프</h2>
+                <div class="graph-controls">
+                    <button id="reset-graph" class="action-btn">🔄 초기화</button>
+                    <button id="toggle-labels" class="action-btn">🏷️ 라벨 토글</button>
+                    <select id="filter-type" class="filter-select">
+                        <option value="all">전체 보기</option>
+                        <option value="franchise">가맹점만</option>
+                        <option value="sv">SV만</option>
+                        <option value="external">외부요인만</option>
+                    </select>
+                </div>
+                <div id="ontology-graph" class="graph-container"></div>
+                <div class="graph-legend">
+                    <div class="legend-item"><span class="legend-dot franchise"></span> 가맹점</div>
+                    <div class="legend-item"><span class="legend-dot sv"></span> SV</div>
+                    <div class="legend-item"><span class="legend-dot external"></span> 외부요인</div>
+                    <div class="legend-item"><span class="legend-dot location"></span> 위치</div>
+                </div>
+            </section>
             <!-- Market Tab -->
             <section id="market" class="tab-content">
                 <h2>시장 인사이트</h2>
@@ -132,6 +155,7 @@
             <button id="close-api-config" class="action-btn">닫기</button>
         </div>
     </div>
+    <script src="ontology-graph.js"></script>
     <script src="app.js"></script>
 </body>
 

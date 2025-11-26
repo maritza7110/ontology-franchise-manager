@@ -136,6 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tabName === 'sv') loadSV();
         if (tabName === 'external') loadExternalFactors();
         if (tabName === 'simulation') { } // No auto-load
+        if (tabName === 'ontology') {
+            if (window.initOntologyGraph) window.initOntologyGraph();
+        }
         if (tabName === 'market') loadMarket();
     }
 
