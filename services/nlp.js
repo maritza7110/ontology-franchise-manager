@@ -60,6 +60,16 @@ function processText(content) {
                 db.franchises.push(franchise);
             }
             currentFranchise = franchise; // Set context
+        } else {
+            // Heuristic: Check if line starts with "[Name]점" (e.g., "강남점 매출...")
+            const startMatch = trimmedLine.match(/^([가-힣A-Za-z0-9]+점)/);
+            if (startMatch) {
+                const name = startMatch[1];
+                let franchise = db.franchises.find(f => f.name === name);
+                if (franchise) {
+                    currentFranchise = franchise;
+                }
+            }
         }
 
         // Extract Sales - handle units (억, 만) and action (increase/decrease)

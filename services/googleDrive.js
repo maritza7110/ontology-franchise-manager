@@ -19,10 +19,16 @@ const SCOPES = ['https://www.googleapis.com/auth/drive.readonly'];
  */
 function createOAuth2Client() {
     // 실제 환경에서는 환경 변수나 설정 파일에서 로드
+    // Production URL on Render
+    const productionRedirectUri = 'https://ontology-franchise-manager.onrender.com/api/drive/oauth2callback';
+    const localRedirectUri = 'http://localhost:3000/api/drive/oauth2callback';
+
+    const redirectUri = process.env.NODE_ENV === 'production' ? productionRedirectUri : localRedirectUri;
+
     const credentials = {
         client_id: process.env.GOOGLE_CLIENT_ID || '',
         client_secret: process.env.GOOGLE_CLIENT_SECRET || '',
-        redirect_uris: ['http://localhost:3000/oauth2callback']
+        redirect_uris: [redirectUri]
     };
 
     const { client_id, client_secret, redirect_uris } = credentials;
