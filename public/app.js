@@ -363,6 +363,41 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // API Settings Modal
+    const openApiConfigBtn = document.getElementById('open-api-config');
+    const closeApiConfigBtn = document.getElementById('close-api-config');
+    const saveApiConfigBtn = document.getElementById('save-api-config');
+    const apiConfigModal = document.getElementById('api-config-modal');
+
+    openApiConfigBtn?.addEventListener('click', () => {
+        // Load existing values from localStorage
+        const clientId = localStorage.getItem('google_client_id') || '';
+        const clientSecret = localStorage.getItem('google_client_secret') || '';
+
+        document.getElementById('google-client-id').value = clientId;
+        document.getElementById('google-client-secret').value = clientSecret;
+
+        apiConfigModal.classList.remove('hidden');
+    });
+
+    closeApiConfigBtn?.addEventListener('click', () => {
+        apiConfigModal.classList.add('hidden');
+    });
+
+    saveApiConfigBtn?.addEventListener('click', () => {
+        const clientId = document.getElementById('google-client-id').value.trim();
+        const clientSecret = document.getElementById('google-client-secret').value.trim();
+
+        if (clientId && clientSecret) {
+            localStorage.setItem('google_client_id', clientId);
+            localStorage.setItem('google_client_secret', clientSecret);
+            alert('✅ API 설정이 저장되었습니다!');
+            apiConfigModal.classList.add('hidden');
+        } else {
+            alert('⚠️ Client ID와 Client Secret을 모두 입력해주세요.');
+        }
+    });
+
     // Initial Load
     loadDashboard();
 });
