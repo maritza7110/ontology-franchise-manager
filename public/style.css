@@ -22,42 +22,65 @@ body {
 
 header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
-    border-bottom: 1px solid #444;
-    padding-bottom: 20px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #333;
+    padding: 20px 0;
+    gap: 30px;
+    flex-wrap: wrap;
 }
 
 h1 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #fff, #a0aec0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    white-space: nowrap;
 }
 
 nav {
     display: flex;
-    gap: 10px;
+    gap: 5px;
+    background: #252836;
+    padding: 6px;
+    border-radius: 12px;
+    overflow-x: auto;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+nav::-webkit-scrollbar {
+    display: none;
 }
 
 .tab-btn {
-    background: none;
+    background: transparent;
     border: none;
-    color: var(--secondary-text);
-    padding: 10px 20px;
+    color: #94a3b8;
+    padding: 10px 18px;
     cursor: pointer;
-    font-size: 1rem;
-    border-radius: 5px;
-    transition: all 0.3s;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
 .tab-btn:hover {
-    background-color: #333;
-    color: var(--text-color);
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .tab-btn.active {
-    background-color: var(--accent-color);
+    background-color: #3b82f6;
     color: white;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.api-settings {
+    margin-left: auto;
 }
 
 .upload-box {
