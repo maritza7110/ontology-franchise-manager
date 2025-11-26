@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ontology Franchise Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🏢 온톨로지 프랜차이즈 매니저</h1>
+            <nav class="nav-left">
+                <button class="tab-btn active" data-tab="dashboard">대시보드</button>
+                <button class="tab-btn" data-tab="franchise">가맹점 관리</button>
+                <button class="tab-btn" data-tab="sv">SV 관리</button>
+                <button class="tab-btn" data-tab="external">⚠️ 외부 요인</button>
+                <button class="tab-btn" data-tab="simulation">🤖 AI 시뮬레이션</button>
+                <button class="tab-btn" data-tab="market">시장 예측</button>
+            </nav>
+            <div class="api-settings">
+                <button id="api-config-btn" class="action-btn">⚙️ API 설정</button>
+            </div>
+        </header>
+        <main>
+            <!-- Upload Section with Multiple Methods -->
+            <section id="upload-section">
+                <div class="upload-methods">
+                    <button class="method-btn active" data-method="file">📁 파일 업로드</button>
+                    <button class="method-btn" data-method="text">✏️ 텍스트 입력</button>
+                    <button class="method-btn" data-method="drive">☁️ 구글 드라이브</button>
+                </div>
+                <!-- File Upload -->
+                <div id="file-upload-area" class="upload-area active">
+                    <div class="upload-box" id="drop-zone">
+                        <p>파일을 드래그하거나 클릭하여 업로드하세요</p>
+                        <input type="file" id="file-input" hidden>
+                    </div>
+                </div>
+                <!-- Text Input -->
+                <div id="text-input-area" class="upload-area">
+                    <h3>데이터 직접 입력</h3>
+                    <textarea id="text-direct-input"
+                        placeholder="예:\n가맹점 강남점\n위치 서울 강남구\n매출 150000000\nSV 김철수\n\n가맹점 부산점\n위치 부산 해운대구\n매출 120000000\nSV 이영희"
+                        rows="10"></textarea>
+                    <button id="text-submit-btn" class="action-btn">📝 데이터 처리</button>
+                </div>
+                <!-- Google Drive -->
+                <div id="drive-area" class="upload-area">
+                    <h3>구글 드라이브 연동</h3>
+                    <button id="google-auth-btn" class="action-btn">🔐 구글 계정으로 로그인</button>
+                    <div id="drive-files-list" class="drive-files" style="display:none;">
+                        <!-- Files will be listed here -->
+                    </div>
+                </div>
+                <div id="upload-status"></div>
+            </section>
+            <!-- Dashboard Tab -->
+            <section id="dashboard" class="tab-content active">
+                <h2>대시보드</h2>
+                <div class="cards">
+                    <div class="card">
+                        <h3>총 가맹점</h3>
+                        <p id="total-franchises">0</p>
+                    </div>
+                    <div class="card">
+                        <h3>총 매출</h3>
+                        <p id="total-sales">0원</p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </section>
+            <!-- Franchise Tab -->
+            <section id="franchise" class="tab-content">
+                <h2>가맹점 매출 순위</h2>
+                <ul id="franchise-list" class="list-group">
+                    <!-- List items will be injected here -->
+                </ul>
+            </section>
+            <!-- SV Tab -->
+            <section id="sv" class="tab-content">
+                <h2>SV 성과</h2>
+                <ul id="sv-list" class="list-group">
+                    <!-- List items will be injected here -->
+                </ul>
+            </section>
+            <!-- External Factors Tab -->
+            <section id="external" class="tab-content">
+                <h2>⚠️ 외부 PEST 요인 모니터링</h2>
+                <div class="actions">
+                    <button id="crawl-btn" class="action-btn">🔄 최신 데이터 수집</button>
+                </div>
+                <div id="external-factors-grid" class="factors-grid">
+                    <!-- Factors will be injected here -->
+                </div>
+            </section>
+            <!-- AI Simulation Tab -->
+            <section id="simulation" class="tab-content">
+                <h2>🤖 AI 시뮬레이션</h2>
+                <div class="simulation-panel">
+                    <h3>질문하기</h3>
+                    <p class="hint">예: "최저임금이 5% 오르고 그래픽카드 가격이 떨어지면 어떻게 해야 해?"</p>
+                    <textarea id="query-input" placeholder="시나리오를 입력하세요..." rows="3"></textarea>
+                    <button id="query-btn" class="action-btn">분석 시작</button>
+                    <div id="simulation-result" class="simulation-result">
+                        <!-- Results will be shown here -->
+                    </div>
+                </div>
+            </section>
+            <!-- Market Tab -->
+            <section id="market" class="tab-content">
+                <h2>시장 인사이트</h2>
+                <ul id="market-list" class="list-group">
+                    <!-- List items will be injected here -->
+                </ul>
+            </section>
+        </main>
+    </div>
+    <!-- API Settings Modal -->
+    <div id="api-config-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>API 설정</h3>
+            <label>Google Client ID:<br><input type="text" id="google-client-id" placeholder="Client ID"></label><br>
+            <label>Google Client Secret:<br><input type="text" id="google-client-secret"
+                    placeholder="Client Secret"></label><br>
+            <button id="save-api-config" class="action-btn">저장</button>
+            <button id="close-api-config" class="action-btn">닫기</button>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>

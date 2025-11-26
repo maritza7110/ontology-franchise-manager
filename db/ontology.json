@@ -1,0 +1,50 @@
+{
+  "franchises": [
+    {
+      "name": "보고서",
+      "sales": 0,
+      "location": "",
+      "sv": "",
+      "status": "Active"
+    },
+    {
+      "name": "강남점",
+      "sales": 150000000,
+      "location": "서울 강남구",
+      "sv": "김철수",
+      "status": "Active"
+    },
+    {
+      "name": "부산점",
+      "sales": 120000000,
+      "location": "부산 해운대구",
+      "sv": "이영희",
+      "status": "Active"
+    }
+  ],
+  "svs": [
+    {
+      "name": "김철수",
+      "franchises": [
+        "강남점"
+      ]
+    },
+    {
+      "name": "이영희",
+      "franchises": [
+        "부산점"
+      ]
+    }
+  ],
+  "customers": [],
+  "market": [
+    {
+      "description": "시장 트렌드: 2025년 상반기 수도권 수요 10% 증가 예상",
+      "date": "2025-11-26T01:30:53.117Z"
+    },
+    {
+      "description": "시장 트렌드: 비대면 서비스 선호도 상승",
+      "date": "2025-11-26T01:30:53.117Z"
+    }
+  ]
+}
