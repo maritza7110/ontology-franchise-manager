@@ -335,56 +335,33 @@ document.addEventListener('DOMContentLoaded', () => {
             resultDiv.innerHTML = `<p class="error">❌ 분석 실패: ${error.message}</p>`;
         } finally {
             btn.disabled = false;
-            if (!data.files || data.files.length === 0) {
-                document.getElementById('drive-files-list').innerHTML = '<p>파일이 없습니다.</p>';
-                return;
-            }
-
-            const filesList = document.getElementById('drive-files-list');
-            filesList.style.display = 'block';
-            filesList.innerHTML = '<h4>파일 목록</h4>' + data.files.map(file => `
-                <div class="drive-file-item" data-file-id="${file.id}" data-file-name="${file.name}">
-                    <span>${file.name}</span>
-                    <button class="process-drive-file" data-file-id="${file.id}" data-file-name="${file.name}">처리</button>
-                </div>
-            `).join('');
-
-            // Add click handlers
-            document.querySelectorAll('.process-drive-file').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const fileId = e.target.dataset.fileId;
-                    const fileName = e.target.dataset.fileName;
-                    await processDriveFile(fileId, fileName);
-                });
-            });
-        } catch (error) {
-            console.error('Failed to load drive files:', error);
+            btn.textContent = '🤖 AI 분석 요청';
         }
-    }
+    });
 
     async function processDriveFile(fileId, fileName) {
-            const statusDiv = document.getElementById('upload-status');
-            statusDiv.textContent = `${fileName} 처리 중...`;
+        const statusDiv = document.getElementById('upload-status');
+        statusDiv.textContent = `${fileName} 처리 중...`;
 
-            try {
-                const res = await fetch(`/api/drive/process-file/${fileId}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ filename: fileName })
-                });
+        try {
+            const res = await fetch(`/api/drive/process-file/${fileId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filename: fileName })
+            });
 
-                const data = await res.json();
+            const data = await res.json();
 
-                if (res.ok) {
-                    statusDiv.textContent = `✅ ${data.message}`;
-                    loadDashboard();
-                } else {
-                    statusDiv.textContent = `❌ ${data.error}`;
-                }
-            } catch (error) {
-                statusDiv.textContent = `❌ 처리 실패: ${error.message}`;
+            if (res.ok) {
+                statusDiv.textContent = `✅ ${data.message}`;
+                loadDashboard();
+            } else {
+                statusDiv.textContent = `❌ ${data.error}`;
             }
+        } catch (error) {
+            statusDiv.textContent = `❌ 처리 실패: ${error.message}`;
         }
+    }
 
     // Initial Load
     loadDashboard();
