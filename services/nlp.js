@@ -62,10 +62,26 @@ function processText(content) {
             currentFranchise = franchise; // Set context
         }
 
-        // Extract Sales - can be on same line or separate line
-        const salesMatch = trimmedLine.match(/매출\s*([0-9,]+)/);
+        // Extract Sales - handle units (억, 만) and action (increase/decrease)
+        const salesMatch = trimmedLine.match(/매출\s*([0-9,]+)(억|만|원)?\s*(상승|증가|추가|하락|감소)?/);
         if (salesMatch && currentFranchise) {
-            currentFranchise.sales = parseInt(salesMatch[1].replace(/,/g, ''));
+            let amount = parseInt(salesMatch[1].replace(/,/g, ''));
+            const unit = salesMatch[2];
+            const action = salesMatch[3];
+
+            // Handle units
+            if (unit === '억') amount *= 100000000;
+            else if (unit === '만') amount *= 10000;
+
+            // Handle actions
+            if (action && (action === '상승' || action === '증가' || action === '추가')) {
+                currentFranchise.sales += amount;
+            } else if (action && (action === '하락' || action === '감소')) {
+                currentFranchise.sales = Math.max(0, currentFranchise.sales - amount);
+            } else {
+                // Default: Overwrite if no action specified
+                currentFranchise.sales = amount;
+            }
         }
 
         // Extract Location - handle multi-word locations like "서울 강남구"

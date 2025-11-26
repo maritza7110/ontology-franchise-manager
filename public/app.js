@@ -12,11 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
             uploadAreas.forEach(a => a.classList.remove('active'));
 
             btn.classList.add('active');
-            document.getElementById(`${method}-${method === 'file' ? 'upload' : method === 'text' ? 'input' : ''}-area`).classList.add('active');
 
+            // Explicitly handle each method to avoid ID errors
             if (method === 'file') document.getElementById('file-upload-area').classList.add('active');
-            if (method === 'text') document.getElementById('text-input-area').classList.add('active');
-            if (method === 'drive') document.getElementById('drive-area').classList.add('active');
+            else if (method === 'text') document.getElementById('text-input-area').classList.add('active');
+            else if (method === 'drive') document.getElementById('drive-area').classList.add('active');
         });
     });
 
@@ -147,12 +147,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch('/api/analysis/franchise-ranking');
             const franchises = await res.json();
 
-            const totalSales = franchises.reduce((sum, f) => sum + (f.sales || 0), 0);
+            // Filter out non-franchise items (reports, analysis results)
+            const validFranchises = franchises.filter(f =>
+                !f.name.includes('보고서') &&
+                !f.name.includes('분석') &&
+                !f.name.includes('Report')
+            );
 
-            document.getElementById('total-franchises').textContent = franchises.length;
+            const totalSales = validFranchises.reduce((sum, f) => sum + (f.sales || 0), 0);
+
+            document.getElementById('total-franchises').textContent = validFranchises.length;
             document.getElementById('total-sales').textContent = totalSales.toLocaleString() + '원';
 
-            renderChart(franchises);
+            renderChart(validFranchises);
         } catch (error) {
             console.error('Failed to load dashboard:', error);
         }
@@ -365,6 +372,33 @@ document.addEventListener('DOMContentLoaded', () => {
             statusDiv.textContent = `❌ 처리 실패: ${error.message}`;
         }
     }
+
+    // Google Drive Auth Button
+    document.getElementById('google-auth-btn')?.addEventListener('click', async () => {
+        try {
+            const res = await fetch('/api/drive/auth-url');
+            const { authUrl } = await res.json();
+
+            // Open popup
+            const width = 500;
+            const height = 600;
+            const left = (window.screen.width / 2) - (width / 2);
+            const top = (window.screen.height / 2) - (height / 2);
+
+            window.open(authUrl, 'Google Auth', `width=${width},height=${height},top=${top},left=${left}`);
+
+            // Listen for success message
+            window.addEventListener('message', (event) => {
+                if (event.data.type === 'google-auth-success') {
+                    alert('✅ 구글 드라이브 연동 성공!');
+                    // Optionally refresh file list here
+                }
+            }, { once: true });
+        } catch (error) {
+            console.error('Auth Error:', error);
+            alert('인증 URL을 가져오는데 실패했습니다. API 설정을 확인해주세요.');
+        }
+    });
 
     // API Settings Modal
     const openApiConfigBtn = document.getElementById('open-api-config');
